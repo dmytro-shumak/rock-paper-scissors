@@ -21,8 +21,10 @@ export class InMemoryGameRepository implements IGameRepository {
   }
 
   async findAvailableGame(): Promise<Game | null> {
-    return Array.from(this.games.values()).find(
-      (game) => !game.player2 && game.getStatus() === 'waiting'
-    ) || null;
+    return (
+      Array.from(this.games.values()).find(
+        (game) => !game.player2 && game.getStatus() === 'waiting'
+      ) || null
+    );
   }
-} 
+}

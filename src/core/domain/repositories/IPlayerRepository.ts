@@ -6,4 +6,4 @@ export interface IPlayerRepository {
   updatePlayer(player: Player): Promise<void>;
   deletePlayer(id: string): Promise<void>;
   findPlayerByUsername(username: string): Promise<Player | null>;
-} 
+}

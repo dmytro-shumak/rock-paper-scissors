@@ -24,4 +24,4 @@ export class Player {
   public incrementScore(): void {
     this.score += 1;
   }
-} 
+}

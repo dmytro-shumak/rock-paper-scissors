@@ -1,4 +1,4 @@
-import type { Player, Choice } from './Player';
+import type { Choice, Player } from './Player';
 
 export type GameStatus = 'waiting' | 'in-progress' | 'finished';
 
@@ -27,7 +27,10 @@ export class Game {
 
     player.makeChoice(choice);
 
-    if (this.player1.status === 'made-choice' && this.player2?.status === 'made-choice') {
+    if (
+      this.player1.status === 'made-choice' &&
+      this.player2?.status === 'made-choice'
+    ) {
       this.determineWinner();
     }
   }
@@ -51,7 +54,8 @@ export class Game {
       scissors: 'paper',
     };
 
-    this.winner = winningCombinations[choice1] === choice2 ? this.player1 : this.player2;
+    this.winner =
+      winningCombinations[choice1] === choice2 ? this.player1 : this.player2;
     this.winner.incrementScore();
     this.status = 'finished';
   }
@@ -70,4 +74,4 @@ export class Game {
     this.player1.reset();
     this.player2?.reset();
   }
-} 
+}

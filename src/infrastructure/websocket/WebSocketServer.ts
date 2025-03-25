@@ -1,10 +1,16 @@
-import { WebSocket, WebSocketServer as WSServer } from 'ws';
-import type { Server } from 'http';
-import { v4 as uuidv4 } from 'uuid';
+import type { Server } from 'node:http';
+import { Game } from '@/core/domain/entities/Game';
+import { Player } from '@/core/domain/entities/Player';
+import type { Choice } from '@/core/domain/entities/Player';
 import type { IGameRepository } from '@/core/domain/repositories/IGameRepository';
 import type { IPlayerRepository } from '@/core/domain/repositories/IPlayerRepository';
-import { Player } from "@/core/domain/entities/Player";
-import { Game } from "@/core/domain/entities/Game";
+import { v4 as uuidv4 } from 'uuid';
+import { WebSocketServer as WSServer, WebSocket } from 'ws';
+
+type WebSocketMessage =
+  | { type: 'join'; username: string }
+  | { type: 'choice'; choice: Choice }
+  | { type: 'reset' };
 
 type Client = WebSocket & {
   id: string;
@@ -45,7 +51,10 @@ export class WebSocketServer {
     });
   }
 
-  private async handleMessage(ws: Client, data: any): Promise<void> {
+  private async handleMessage(
+    ws: Client,
+    data: WebSocketMessage
+  ): Promise<void> {
     switch (data.type) {
       case 'join':
         await this.handleJoin(ws, data.username);
@@ -63,7 +72,8 @@ export class WebSocketServer {
 
   private async handleJoin(ws: Client, username: string): Promise<void> {
     try {
-      const existingPlayer = await this.playerRepository.findPlayerByUsername(username);
+      const existingPlayer =
+        await this.playerRepository.findPlayerByUsername(username);
       if (existingPlayer) {
         this.sendError(ws, 'Username already taken');
         return;
@@ -95,14 +105,14 @@ export class WebSocketServer {
     }
   }
 
-  private async handleChoice(ws: Client, choice: string): Promise<void> {
+  private async handleChoice(ws: Client, choice: Choice): Promise<void> {
     if (!ws.player || !ws.game) {
       this.sendError(ws, 'Not in a game');
       return;
     }
 
     try {
-      ws.game.makeChoice(ws.player, choice as any);
+      ws.game.makeChoice(ws.player, choice);
       await this.gameRepository.updateGame(ws.game);
       this.broadcastGameState(ws.game);
     } catch (error) {
@@ -157,4 +167,4 @@ export class WebSocketServer {
       message,
     });
   }
-} 
+}

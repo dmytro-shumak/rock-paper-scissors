@@ -6,4 +6,4 @@ export interface IGameRepository {
   updateGame(game: Game): Promise<void>;
   deleteGame(id: string): Promise<void>;
   findAvailableGame(): Promise<Game | null>;
-} 
+}

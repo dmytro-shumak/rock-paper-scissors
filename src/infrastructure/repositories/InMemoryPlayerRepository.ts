@@ -21,8 +21,10 @@ export class InMemoryPlayerRepository implements IPlayerRepository {
   }
 
   async findPlayerByUsername(username: string): Promise<Player | null> {
-    return Array.from(this.players.values()).find(
-      (player) => player.username === username
-    ) || null;
+    return (
+      Array.from(this.players.values()).find(
+        (player) => player.username === username
+      ) || null
+    );
   }
-} 
+}

@@ -9,7 +9,7 @@
     "build": "tsc",
     "format": "biome format --write .",
     "lint": "biome lint .",
-    "check": "biome check --apply ."
+    "check": "biome check --write ."
   },
   "keywords": [],
   "author": "",
