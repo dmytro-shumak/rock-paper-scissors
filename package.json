@@ -1,0 +1,33 @@
+{
+  "name": "rock-paper-scissors",
+  "version": "1.0.0",
+  "description": "Online Rock Paper Scissors game",
+  "main": "dist/index.js",
+  "scripts": {
+    "start": "node dist/index.js",
+    "dev": "nodemon",
+    "build": "tsc",
+    "format": "biome format --write .",
+    "lint": "biome lint .",
+    "check": "biome check --apply ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/express": "^5.0.1",
+    "@types/node": "^22.13.13",
+    "@types/uuid": "^10.0.0",
+    "@types/ws": "^8.18.0",
+    "express": "^4.21.2",
+    "typescript": "^5.8.2",
+    "uuid": "^11.1.0",
+    "ws": "^8.18.1"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "nodemon": "^3.1.9",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0"
+  }
+}
