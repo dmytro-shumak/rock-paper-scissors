@@ -40,7 +40,7 @@ export class WebSocketServer {
         try {
           const data = JSON.parse(message);
           await this.handleMessage(ws, data);
-        } catch (error) {
+        } catch (_error) {
           this.sendError(ws, 'Invalid message format');
         }
       });
@@ -100,7 +100,7 @@ export class WebSocketServer {
         player: player,
         game: ws.game,
       });
-    } catch (error) {
+    } catch (_error) {
       this.sendError(ws, 'Failed to join game');
     }
   }
@@ -114,8 +114,12 @@ export class WebSocketServer {
     try {
       ws.game.makeChoice(ws.player, choice);
       await this.gameRepository.updateGame(ws.game);
-      this.broadcastGameState(ws.game);
-    } catch (error) {
+      
+      const game = await this.gameRepository.getGame(ws.game.id);
+      if(game?.getStatus() === 'finished') {
+        this.broadcastGameState(ws.game);
+      }
+    } catch (_error) {
       this.sendError(ws, 'Invalid choice');
     }
   }
@@ -130,7 +134,7 @@ export class WebSocketServer {
       ws.game.reset();
       await this.gameRepository.updateGame(ws.game);
       this.broadcastGameState(ws.game);
-    } catch (error) {
+    } catch (_error) {
       this.sendError(ws, 'Failed to reset game');
     }
   }
@@ -138,6 +142,9 @@ export class WebSocketServer {
   private handleDisconnect(ws: Client): void {
     if (ws.game) {
       this.broadcastGameState(ws.game);
+    }
+    if(ws.player) {
+      this.playerRepository.deletePlayer(ws.player?.id)
     }
     this.clients.delete(ws.id);
   }

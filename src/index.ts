@@ -14,7 +14,7 @@ app.use(express.static(path.join(__dirname, '../public')));
 const gameRepository = new InMemoryGameRepository();
 const playerRepository = new InMemoryPlayerRepository();
 
-const wss = new WebSocketServer(server, gameRepository, playerRepository);
+new WebSocketServer(server, gameRepository, playerRepository);
 
 const PORT = process.env.PORT || 3000;
 

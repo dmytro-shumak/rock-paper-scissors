@@ -5,6 +5,7 @@ export class InMemoryPlayerRepository implements IPlayerRepository {
   private players: Map<string, Player> = new Map();
 
   async createPlayer(player: Player): Promise<void> {
+    console.log('players', this.players);
     this.players.set(player.id, player);
   }
 

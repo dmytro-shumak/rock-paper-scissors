@@ -40,8 +40,8 @@ export class Game {
       throw new Error('Both players must make a choice');
     }
 
-    const choices = [this.player1.choice, this.player2.choice];
-    const [choice1, choice2] = choices;
+    const choice1 = this.player1.choice;
+    const choice2 = this.player2.choice;
 
     if (choice1 === choice2) {
       this.status = 'finished';
